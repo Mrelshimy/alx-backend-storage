@@ -27,12 +27,14 @@ class Cache:
             return fn(value)
         return value
 
-    def get_str(self, value: str) -> str:
+    def get_str(self, key: str) -> str:
         """ Function to return int value of value"""
+        value = self._redis.get(key)
         return value.decode('utf-8')
 
-    def get_int(self, value: str) -> int:
+    def get_int(self, key: str) -> int:
         """ Function to return string value of value"""
-        if int(value.decode('utf-8')):
+        value = self._redis.get(key)
+        if value:
             return int(value.decode('utf-8'))
         return 0
