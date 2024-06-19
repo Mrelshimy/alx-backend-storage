@@ -19,24 +19,26 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable])\
-            -> Union[str, bytes, int, float]:
-        """ Return Key value to original format using fn """
+    def get(self, key: str,
+            fn: Optional[callable] = None) -> Union[str, bytes, int, float]:
+        """convert the data back to the desired format"""
         value = self._redis.get(key)
         if fn:
-            return fn(value)
+            value = fn(value)
         return value
 
     def get_str(self, key: str) -> str:
-        """ Function to return int value of value"""
+        """automatically parametrize Cache.get with the correct
+        conversion function"""
         value = self._redis.get(key)
-        return value.decode('utf-8')
+        return value.decode("utf-8")
 
     def get_int(self, key: str) -> int:
-        """ Function to return string value of value"""
+        """automatically parametrize Cache.get with the correct
+        conversion function"""
         value = self._redis.get(key)
         try:
-            value = int(value.decode('utf-8'))
+            value = int(value.decode("utf-8"))
         except Exception:
             value = 0
         return value
