@@ -70,12 +70,14 @@ class Cache:
         value = self._redis.get(key)
         return int(value.decode("utf-8")) if int(value.decode("utf-8")) else 0
 
-    def replay(self, method: Callable) -> str:
-        """ Method to display history of
-        method excution"""
+    def replay(self, method):
+        """
+        display the history of calls of a particular function
+
+        """
         key = method.__qualname__
-        key_inputs = key + ":inputs"
-        key_outputs = key + ":outputs"
+        key_inputs= key + ":inputs"
+        key_outputs= key + ":outputs"
         count = self.get(key).decode("utf-8")
         print(f"Cache.{key} was called {count} times:")
         inputs = self._redis.lrange(key_inputs, 0, -1)
