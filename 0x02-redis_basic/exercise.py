@@ -35,5 +35,8 @@ class Cache:
     def get_int(self, key: str) -> int:
         """ Function to return string value of value"""
         value = self._redis.get(key)
-        return int(int(value.decode('utf-8'))
-                    if int(value.decode('utf-8')) else 0)
+        try:
+            value = int(value.decode('utf-8'))
+        except Exception:
+            value = 0
+        return value
