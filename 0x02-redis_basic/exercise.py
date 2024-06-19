@@ -69,3 +69,18 @@ class Cache:
         """ Function to return int value of value"""
         value = self._redis.get(key)
         return int(value.decode("utf-8")) if int(value.decode("utf-8")) else 0
+    
+    def replay(self, method: Callable) -> str:
+        """ Method to display history of
+        method excution"""
+        key = method.__qualname__
+        key_inputs= key + ":inputs"
+        key_outputs= key + ":outputs"
+        count = self.get(key).decode("utf-8")
+        print(f"Cache.{key} was called {count} times:")
+        inputs = self._redis.lrange(key_inputs, 0, -1)
+        outputs = self._redis.lrange(key_outputs, 0, -1)
+        zipped_list = list(zip(inputs, outputs))
+
+        for i, (input, output) in enumerate(zipped_list):
+            print(f"{key} (*{output}) -> {input}")
