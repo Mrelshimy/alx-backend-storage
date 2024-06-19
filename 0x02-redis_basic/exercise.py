@@ -33,6 +33,6 @@ class Cache:
 
     def get_int(self, value: str) -> int:
         """ Function to return string value of value"""
-        if value.decode('utf-8'):
+        if int(value.decode('utf-8')):
             return int(value.decode('utf-8'))
         return 0
